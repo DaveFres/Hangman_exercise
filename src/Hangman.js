@@ -9,6 +9,7 @@ import img5 from "./5.jpg";
 import img6 from "./6.jpg";
 
 import uuidv1 from 'uuid';
+import { randomWord } from './words';
 
 class Hangman extends Component {
   /** by default, allow 6 guesses and use provided gallows images. */
@@ -19,8 +20,10 @@ class Hangman extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { nWrong: 0, guessed: new Set(), answer: "apple" };
+    this.state = { nWrong: 0, guessed: new Set(), answer: randomWord() };
     this.handleGuess = this.handleGuess.bind(this);
+    this.handleRestart = this.handleRestart.bind(this);
+
   }
 
   /** guessedWord: show current-state of word:
@@ -58,8 +61,23 @@ class Hangman extends Component {
     ));
   }
 
+  /** handleRestart: handle a restart button:
+    - pick a new random word 
+    - reset the guessed list
+    - reset number of wrong guesses 
+  */
+  handleRestart() {   
+    this.setState(st => ({
+      nWrong: 0,
+      guessed: new Set(),
+      answer: randomWord()
+    }));
+  }
+
+
   /** render: render game */
   render() {
+    
     return (
         <div className="Hangman">
             <h1>Hangman</h1>
@@ -71,6 +89,7 @@ class Hangman extends Component {
                 <div>
                   <p>YOU LOOOSE!</p>
                   <p>CORRECT WORD IS: {this.state.answer}</p>
+                  <button onClick={this.handleRestart}>Restart</button>
                 </div>
             ) : (
                 <p className="Hangman-btns">{this.generateButtons()}</p>
